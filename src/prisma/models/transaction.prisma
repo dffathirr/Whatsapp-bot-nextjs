@@ -1,0 +1,36 @@
+model Transaction {
+  id BigInt @id @default(autoincrement()) @db.UnsignedBigInt
+
+  walletId BigInt @map("wallet_id") @db.UnsignedBigInt
+  userId   BigInt @map("user_id") @db.UnsignedBigInt
+
+  kdType     String @map("kd_type") @db.VarChar(50)
+  kdCategory String @map("kd_category") @db.VarChar(50)
+
+  amount Decimal @db.Decimal(18,2)
+
+  description String? @db.Text
+
+  transferWalletId BigInt? @map("transfer_wallet") @db.UnsignedBigInt
+
+  transactionDate DateTime @map("transaction_date")
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  softDelete Boolean @default(false) @map("soft_delete")
+
+  wallet         Wallet     @relation("WalletTransaction", fields: [walletId], references: [id])
+  transferWallet Wallet?    @relation("TransferWallet", fields: [transferWalletId], references: [id])
+  user           User       @relation(fields: [userId], references: [id])
+  type           Reference  @relation("TransactionType", fields: [kdType], references: [code])
+  category       Reference  @relation("TransactionCategory", fields: [kdCategory], references: [code])
+
+  @@index([walletId])
+  @@index([userId])
+  @@index([kdType])
+  @@index([kdCategory])
+  @@index([transactionDate])
+
+  @@map("transactions")
+}

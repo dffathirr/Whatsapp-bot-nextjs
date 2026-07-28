@@ -1,0 +1,13 @@
+model Reference {
+  id          BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  code        String  @unique @db.VarChar(50)
+  name        String  @db.VarChar(100)
+  group       String  @db.VarChar(50)
+  description String? @db.Text
+
+  walletTypes           Wallet[]
+  transactionTypes      Transaction[] @relation("TransactionType")
+  transactionCategories Transaction[] @relation("TransactionCategory")
+
+  @@map("reference")
+}
