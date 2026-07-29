@@ -40,6 +40,9 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# whatsapp session
+/src/whatsapp/session
+
 /src/generated/prisma
 
 .agents/
