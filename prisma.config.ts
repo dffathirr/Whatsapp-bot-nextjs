@@ -9,6 +9,6 @@ export default defineConfig({
     path: "src/prisma/migations",
   },
   datasource: {
-    url: process.env["DB_URL"],
+    url: process.env["DATABASE_URL"],
   },
 });
