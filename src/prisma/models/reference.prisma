@@ -1,5 +1,5 @@
 model Reference {
-  id          BigInt  @id @default(autoincrement()) @db.UnsignedBigInt
+  id          Int     @id @default(autoincrement()) @db.UnsignedInt
   code        String  @unique @db.VarChar(50)
   name        String  @db.VarChar(100)
   group       String  @db.VarChar(50)

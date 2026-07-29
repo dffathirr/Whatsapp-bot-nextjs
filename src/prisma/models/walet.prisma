@@ -1,6 +1,6 @@
 model Wallet {
-  id             BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
-  userId         BigInt   @map("user_id") @db.UnsignedBigInt
+  id             Int      @id @default(autoincrement()) @db.UnsignedInt
+  userId         Int      @map("user_id") @db.UnsignedInt
   kdType         String   @map("kd_type") @db.VarChar(50)
 
   name           String   @db.VarChar(100)

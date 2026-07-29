@@ -1,5 +1,5 @@
 model User {
-  id       BigInt   @id @default(autoincrement()) @db.UnsignedBigInt
+  id       Int      @id @default(autoincrement()) @db.UnsignedInt
   name     String   @db.VarChar(100)
   phone    String?  @unique @db.VarChar(20)
   nik      String?  @unique @db.VarChar(20)
