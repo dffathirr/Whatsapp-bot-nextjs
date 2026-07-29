@@ -1,4 +1,5 @@
 import { ApiParams, ApiResponse } from "./type";
+import { JwtPayload } from "jsonwebtoken";
 
 export type AuthResponse = ApiResponse<{
   nama: string;
@@ -13,4 +14,11 @@ export interface JWTParams {
   nama: string;
   phone: string;
   nik?: string;
+}
+
+export interface AuthPayload extends JwtPayload {
+  userId: number;
+  nama: string;
+  phone: string;
+  nik: string | null;
 }

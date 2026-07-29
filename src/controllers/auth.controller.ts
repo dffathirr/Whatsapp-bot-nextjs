@@ -1,6 +1,4 @@
-import { getErrorMessage } from "@/helpers/site";
 import { prisma } from "@/lib/prisma";
-import { AuthParams } from "@/types/auth";
 
 export async function getUser(phone: string) {
   return prisma.user.findUnique({

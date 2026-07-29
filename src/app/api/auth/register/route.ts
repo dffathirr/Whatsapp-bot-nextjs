@@ -1,4 +1,5 @@
 import { addUser, getUser } from "@/controllers/auth.controller";
+import { ApiError } from "@/helpers/api";
 import { ApiResponse, getErrorMessage } from "@/helpers/site";
 
 export async function POST(request: Request) {
@@ -27,6 +28,10 @@ export async function POST(request: Request) {
 
     return ApiResponse(201, "Success", res);
   } catch (error) {
+    if (error instanceof ApiError) {
+      return ApiResponse(error.status, error.message, null);
+    }
+
     return ApiResponse(500, getErrorMessage(error), null);
   }
 }
