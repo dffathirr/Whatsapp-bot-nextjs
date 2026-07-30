@@ -1,0 +1,14 @@
+model WhatsappSession {
+  id          BigInt   @id @default(autoincrement()) @db.BigInt
+  sessionName String   @unique @map("session_name") @db.VarChar(100)
+  phone       String?  @db.VarChar(20)
+  creds       Json
+
+  createdDate DateTime @default(now()) @map("created_date")
+  updatedDate DateTime @updatedAt @map("updated_date")
+
+  sessionKeys WhatsappSessionKey[]
+
+  @@map("whatsapp_sessions")
+}
+
