@@ -24,12 +24,17 @@ export function mapIncomingMessage(msg: WAMessage): IncomingMessage {
   const isGroup = jid.endsWith("@g.us");
   const isPrivate = jid.endsWith("@s.whatsapp.net") || jid.endsWith("@lid");
 
+  const altNumber =
+    msg.key.remoteJidAlt?.replace("@s.whatsapp.net", "") ??
+    msg.key.participantAlt?.replace("@s.whatsapp.net", "");
+  const standardNumber = jid.endsWith("@s.whatsapp.net")
+    ? jid.replace("@s.whatsapp.net", "")
+    : undefined;
+
   return {
     id: msg.key.id ?? "",
     jid,
-    fromNumber:
-      msg.key.remoteJidAlt?.replace("@s.whatsapp.net", "") ??
-      msg.key.participantAlt?.replace("@s.whatsapp.net", ""),
+    fromNumber: altNumber ?? standardNumber,
     fromName: msg.pushName ?? "",
     type: isGroup ? "Group" : isPrivate ? "Personal" : "Unknown",
     text:

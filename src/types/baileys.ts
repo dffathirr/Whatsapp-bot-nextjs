@@ -6,3 +6,9 @@ export interface IncomingMessage {
   type: string;
   text: string;
 }
+
+export type ParsedCommand = {
+  command: string;
+  args: string[];
+  raw: string;
+};

@@ -8,13 +8,18 @@ export async function getUser(phone: string) {
   });
 }
 
-export async function addUser(phone: string, name: string, nik?: string) {
+export async function addUser(
+  phone: string,
+  name: string,
+  nik?: string,
+  currency: string = "IDR",
+) {
   return prisma.user.create({
     data: {
       name,
       phone,
       nik: nik || null,
-      currency: "IDR",
+      currency: currency || "IDR",
     },
   });
 }
