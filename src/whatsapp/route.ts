@@ -3,7 +3,7 @@ import { WASocket } from "@whiskeysockets/baileys";
 import { parseCommand } from "./parser";
 import RegisterCommand from "./commands/register.command";
 import LoginCommand from "./commands/login.command";
-import { sendGreeting, sendHelp } from "./response";
+import { ResponseMessage, sendGreeting, sendHelp } from "./response";
 
 export default async function Route(sock: WASocket, msg: IncomingMessage) {
   if (!msg.text?.trim() || !msg.jid) return;
@@ -42,9 +42,11 @@ export default async function Route(sock: WASocket, msg: IncomingMessage) {
       console.log("adjust");
       break;
     default:
-      await sock.sendMessage(msg.jid, {
-        text: `❓ Perintah */${parsed.command}* tidak dikenali.\n\nKetik */help* untuk melihat daftar perintah yang tersedia.`,
-      });
+      await ResponseMessage(
+        sock,
+        msg.jid,
+        `❓ Perintah */${parsed.command}* tidak dikenali.\n\nKetik */help* untuk melihat daftar perintah yang tersedia.`,
+      );
       break;
   }
 }

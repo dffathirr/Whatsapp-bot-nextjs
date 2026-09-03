@@ -121,3 +121,25 @@ export function generateSearchParams(
 
   return searchParams.toString();
 }
+
+export const COMMON_CURRENCIES = new Set([
+  "IDR",
+  "USD",
+  "EUR",
+  "SGD",
+  "MYR",
+  "JPY",
+  "CNY",
+  "GBP",
+  "AUD",
+  "CAD",
+  "CHF",
+  "THB",
+  "SAR",
+  "KRW",
+  "PHP",
+  "VND",
+  "INR",
+  "NZD",
+  "HKD",
+]);
