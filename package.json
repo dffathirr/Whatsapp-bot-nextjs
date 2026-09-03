@@ -7,7 +7,7 @@
     "build": "next build",
     "start": "next start",
     "lint": "eslint",
-    "bot": "tsx src/whatsapp/index.ts"
+    "bot": "tsx src/whatsapp/main.ts"
   },
   "dependencies": {
     "@prisma/client": "^6.3.1",
