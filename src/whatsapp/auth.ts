@@ -3,6 +3,7 @@ import {
   BufferJSON,
   AuthenticationState,
   AuthenticationCreds,
+  SignalDataTypeMap,
 } from "@whiskeysockets/baileys";
 import { prisma } from "../lib/prisma";
 
@@ -42,8 +43,8 @@ export const usePrismaAuthState = async (sessionName: string) => {
   const state: AuthenticationState = {
     creds,
     keys: {
-      get: async (type, ids) => {
-        const data: { [id: string]: any } = {};
+      get: async <T extends keyof SignalDataTypeMap>(type: T, ids: string[]) => {
+        const data: { [id: string]: SignalDataTypeMap[T] } = {};
 
         await Promise.all(
           ids.map(async (id) => {
@@ -61,7 +62,7 @@ export const usePrismaAuthState = async (sessionName: string) => {
               data[id] = JSON.parse(
                 JSON.stringify(val.value),
                 BufferJSON.reviver,
-              );
+              ) as SignalDataTypeMap[T];
             }
           }),
         );
@@ -69,7 +70,7 @@ export const usePrismaAuthState = async (sessionName: string) => {
         return data;
       },
       set: async (data) => {
-        const tasks: any[] = [];
+        const tasks: Promise<unknown>[] = [];
         for (const category in data) {
           for (const id in data[category as keyof typeof data]) {
             const value = data[category as keyof typeof data]?.[id];

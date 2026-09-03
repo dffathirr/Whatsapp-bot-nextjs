@@ -1,6 +1,7 @@
 import { IncomingMessage, ParsedCommand } from "@/types/baileys";
 import { WASocket } from "@whiskeysockets/baileys";
 import { addUser, getUser } from "@/controllers/auth.controller";
+import { getErrorMessage } from "@/helpers/site";
 import { prisma } from "@/lib/prisma";
 
 const COMMON_CURRENCIES = new Set([
@@ -135,10 +136,10 @@ export default async function RegisterCommand(
         "Akun Anda sudah aktif. Ketik */help* untuk melihat daftar perintah.",
       ].join("\n"),
     });
-  } catch (error: any) {
+  } catch (error: unknown) {
     console.error("Error pada RegisterCommand:", error);
     await sock.sendMessage(msg.jid!, {
-      text: `❌ Terjadi kesalahan saat registrasi: ${error?.message || "Internal Server Error"}`,
+      text: `❌ Terjadi kesalahan saat registrasi: ${getErrorMessage(error)}`,
     });
   }
 }
