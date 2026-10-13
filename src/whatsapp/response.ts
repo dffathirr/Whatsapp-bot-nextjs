@@ -34,7 +34,7 @@ const sendHelp = async (sock: WASocket, jid: string) => {
     "📌 *Daftar Perintah BROBOT:*",
     "",
     "• */register* — Mendaftar akun baru",
-    "• */login* — Cek status dan login akun",
+    // "• */login* — Cek status dan login akun",
     "• */add* — Catat pemasukan",
     "• */buy* — Catat pengeluaran",
     "• */tf* — Transfer antar-dompet",

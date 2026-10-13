@@ -26,9 +26,9 @@ export default async function Route(sock: WASocket, msg: IncomingMessage) {
     case "register":
       await RegisterCommand(sock, msg, parsed);
       break;
-    case "login":
-      await LoginCommand(sock, msg, parsed);
-      break;
+    // case "login":
+    //   await LoginCommand(sock, msg, parsed);
+    //   break;
     case "add":
       console.log("add");
       break;
