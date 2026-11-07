@@ -1,0 +1,30 @@
+enum RulePeriod {
+  daily
+  weekly
+  monthly
+}
+
+model Rule {
+  id          Int        @id @default(autoincrement()) @db.UnsignedInt
+  userId      Int        @map("user_id") @db.UnsignedInt
+  walletId    Int?       @map("wallet_id") @db.UnsignedInt
+  kdType      String     @map("kd_type") @db.VarChar(50)
+  description String?    @db.Text
+  limit       Decimal    @db.Decimal(18, 2)
+  period      RulePeriod
+  isActive    Boolean    @default(true) @map("is_active")
+
+  createdAt   DateTime   @default(now()) @map("created_date")
+  updatedAt   DateTime   @updatedAt @map("updated_date")
+
+  user        User       @relation(fields: [userId], references: [id])
+  wallet      Wallet?    @relation(fields: [walletId], references: [id])
+  type        Reference  @relation("RuleTransactionType", fields: [kdType], references: [code])
+
+  @@index([userId])
+  @@index([walletId])
+  @@index([kdType])
+
+  @@map("rules")
+}
+

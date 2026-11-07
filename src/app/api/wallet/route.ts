@@ -38,7 +38,9 @@ export async function POST(request: NextRequest) {
   try {
     const formData = await request.formData();
 
-    const kd_type = formData.get("kd_type")?.toString();
+    const kd_wallet =
+      formData.get("kd_wallet")?.toString() ??
+      formData.get("kd_type")?.toString();
     const name = formData.get("name")?.toString();
     const init_balance = formData.get("initial_balance")?.toString();
     const curr_balance = formData.get("current_balance")?.toString();
@@ -46,15 +48,15 @@ export async function POST(request: NextRequest) {
     const token = getBearerToken(request);
     const { userId } = verifyToken(token);
 
-    if (!kd_type) {
-      return ApiResponse(400, "kd_type wajib diisi", null);
+    if (!kd_wallet) {
+      return ApiResponse(400, "kd_wallet wajib diisi", null);
     }
 
     if (!init_balance) {
       return ApiResponse(400, "init_balance wajib diisi", null);
     }
 
-    const check = await checkWallet(userId, kd_type);
+    const check = await checkWallet(userId, kd_wallet);
 
     if (check) {
       return ApiResponse(400, "Wallet sudah ditambahkan!", null);
@@ -62,7 +64,7 @@ export async function POST(request: NextRequest) {
 
     const res = await addWallet(
       userId,
-      kd_type,
+      kd_wallet,
       name ?? "",
       Number(init_balance),
       Number(curr_balance ?? init_balance),
@@ -81,22 +83,24 @@ export async function PUT(request: NextRequest) {
   try {
     const formData = await request.formData();
 
-    const kd_type = formData.get("kd_type")?.toString();
+    const kd_wallet =
+      formData.get("kd_wallet")?.toString() ??
+      formData.get("kd_type")?.toString();
     const curr_balance = formData.get("current_balance")?.toString();
     const init_balance = formData.get("initial_balance")?.toString();
 
     const token = getBearerToken(request);
     const { userId } = verifyToken(token);
 
-    if (!kd_type) {
-      return ApiResponse(400, "kd_type wajib diisi", null);
+    if (!kd_wallet) {
+      return ApiResponse(400, "kd_wallet wajib diisi", null);
     }
 
     if (!curr_balance) {
       return ApiResponse(400, "current_balance wajib diisi", null);
     }
 
-    const check = await checkWallet(userId, kd_type);
+    const check = await checkWallet(userId, kd_wallet);
 
     if (!check) {
       return ApiResponse(404, "Wallet tidak ditemukan!", null);
@@ -104,7 +108,7 @@ export async function PUT(request: NextRequest) {
 
     const res = await updateWallet(
       userId,
-      kd_type,
+      kd_wallet,
       Number(curr_balance),
       init_balance ? Number(init_balance) : undefined,
     );

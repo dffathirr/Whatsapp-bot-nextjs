@@ -125,6 +125,7 @@ export default async function RegisterCommand(
       `• No. HP: ${newUser.phone}`,
       `• NIK: ${newUser.nik || "-"}`,
       `• Mata Uang: ${newUser.currency}`,
+      `• Dompet Default: Tunai (Rp 0)`,
       "",
       "Akun Anda sudah aktif. Ketik */help* untuk melihat daftar perintah.",
     ]);

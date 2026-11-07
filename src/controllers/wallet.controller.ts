@@ -8,18 +8,18 @@ export async function getWallet(id: number) {
   });
 }
 
-export async function checkWallet(id: number, kd_type: string) {
+export async function checkWallet(id: number, kd_wallet: string) {
   return await prisma.wallet.findFirst({
     where: {
       userId: id,
-      kdType: kd_type,
+      kdWallet: kd_wallet,
     },
   });
 }
 
 export async function addWallet(
   user_id: number,
-  kd_type: string,
+  kd_wallet: string,
   name: string,
   init_balance: number,
   curr_balance: number,
@@ -27,7 +27,7 @@ export async function addWallet(
   return prisma.wallet.create({
     data: {
       userId: user_id,
-      kdType: kd_type,
+      kdWallet: kd_wallet,
       name,
       initialBalance: init_balance,
       currentBalance: curr_balance,
@@ -37,11 +37,11 @@ export async function addWallet(
 
 export async function updateWallet(
   user_id: number,
-  kd_type: string,
+  kd_wallet: string,
   curr_balance: number,
   init_balance?: number,
 ) {
-  const wallet = await checkWallet(user_id, kd_type);
+  const wallet = await checkWallet(user_id, kd_wallet);
   if (!wallet) throw new Error("Wallet not found");
 
   return prisma.wallet.update({

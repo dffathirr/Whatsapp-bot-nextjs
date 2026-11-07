@@ -39,9 +39,12 @@ export const WALLET_REF = {
   ShopeePay: { code: "WAL007", hint: "Shopee / ShopeePay / SPay" },
   OVO: { code: "WAL008", hint: "e-wallet OVO" },
   SeaBank: { code: "WAL009", hint: "SeaBank" },
-  "Bank Jago": { code: "WAL0010", hint: "Jago" },
+  "Bank Jago": { code: "WAL010", hint: "Jago" },
   "Bank Jenius": { code: "WAL011", hint: "Jenius" },
 } as const;
+
+export const RULE_PERIODS = ["daily", "weekly", "monthly"] as const;
+export type RulePeriodType = (typeof RULE_PERIODS)[number];
 
 const keysOf = <T extends Record<string, unknown>>(obj: T) =>
   Object.keys(obj) as [keyof T & string, ...(keyof T & string)[]];
@@ -49,3 +52,15 @@ const keysOf = <T extends Record<string, unknown>>(obj: T) =>
 export const TRANSACTION_TYPES = keysOf(TYPE_REF);
 export const TRANSACTION_CATEGORIES = keysOf(CATEGORY_REF);
 export const WALLET_TYPES = keysOf(WALLET_REF);
+export type RefEntry = { readonly code: string; readonly hint: string };
+export type RefMap = Readonly<Record<string, RefEntry>>;
+
+export function getRefCode(ref: RefMap, name?: string | null): string | null {
+  if (!name) return null;
+
+  const key = name.trim().toLowerCase();
+  for (const [refName, entry] of Object.entries(ref)) {
+    if (refName.toLowerCase() === key) return entry.code;
+  }
+  return null;
+}

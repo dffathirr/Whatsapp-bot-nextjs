@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { ApiError } from "@/helpers/api";
+import { checkWallet } from "./wallet.controller";
 
 export async function addTransaction(
   walletId: number,
@@ -12,7 +13,10 @@ export async function addTransaction(
   transferWalletId?: number,
 ) {
   if (kdType === "TRX003" && !transferWalletId) {
-    throw new ApiError(400, "transfer_wallet wajib diisi untuk transaksi transfer");
+    throw new ApiError(
+      400,
+      "transfer_wallet wajib diisi untuk transaksi transfer",
+    );
   }
 
   return prisma.$transaction(async (tx) => {
@@ -52,4 +56,65 @@ export async function addTransaction(
 
     return transaction;
   });
+}
+
+export async function addTransactionBot(
+  walletCode: string,
+  userId: number,
+  kdType: string,
+  kdCategory: string,
+  amount: number,
+  transactionDate: string,
+  description?: string,
+  transferWalletCode?: string,
+) {
+  if (kdType === "TRX003" && !transferWalletCode) {
+    throw new ApiError(
+      400,
+      "transfer_wallet wajib diisi untuk transaksi transfer",
+    );
+  }
+
+  const wallet = await checkWallet(userId, walletCode)
+
+  if (!wallet) throw new ApiError(400, "Wallet tidak ditemukan, harap cek kembali!")
+
+  console.log('wallet', wallet, userId, kdType)
+  // return prisma.$transaction(async (tx) => {
+  //   const transaction = await tx.transaction.create({
+  //     data: {
+  //       walletId,
+  //       userId,
+  //       kdType,
+  //       kdCategory,
+  //       amount,
+  //       transactionDate,
+  //       description,
+  //       transferWalletId,
+  //     },
+  //   });
+
+  //   if (kdType === "TRX001" || kdType === "TRX004") {
+  //     await tx.wallet.update({
+  //       where: { id: walletId },
+  //       data: { currentBalance: { increment: amount } },
+  //     });
+  //   } else if (kdType === "TRX002") {
+  //     await tx.wallet.update({
+  //       where: { id: walletId },
+  //       data: { currentBalance: { decrement: amount } },
+  //     });
+  //   } else if (kdType === "TRX003" && transferWalletId) {
+  //     await tx.wallet.update({
+  //       where: { id: walletId },
+  //       data: { currentBalance: { decrement: amount } },
+  //     });
+  //     await tx.wallet.update({
+  //       where: { id: transferWalletId },
+  //       data: { currentBalance: { increment: amount } },
+  //     });
+  //   }
+
+  //   return transaction;
+  // });
 }

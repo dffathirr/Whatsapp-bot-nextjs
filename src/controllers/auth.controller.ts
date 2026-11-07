@@ -20,6 +20,17 @@ export async function addUser(
       phone,
       nik: nik || null,
       currency: currency || "IDR",
+      wallets: {
+        create: {
+          kdWallet: "WAL001",
+          name: "Tunai",
+          initialBalance: 0,
+          currentBalance: 0,
+        },
+      },
+    },
+    include: {
+      wallets: true,
     },
   });
 }

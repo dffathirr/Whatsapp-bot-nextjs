@@ -1,7 +1,7 @@
 model Wallet {
   id             Int      @id @default(autoincrement()) @db.UnsignedInt
   userId         Int      @map("user_id") @db.UnsignedInt
-  kdType         String   @map("kd_type") @db.VarChar(50)
+  kdWallet       String   @map("kd_wallet") @db.VarChar(50)
 
   name           String   @db.VarChar(100)
 
@@ -13,13 +13,14 @@ model Wallet {
 
   user User @relation(fields: [userId], references: [id])
 
-  type Reference @relation(fields: [kdType], references: [code])
+  type Reference @relation(fields: [kdWallet], references: [code])
 
   transactions         Transaction[] @relation("WalletTransaction")
   transferTransactions Transaction[] @relation("TransferWallet")
+  rules                Rule[]
 
   @@index([userId])
-  @@index([kdType])
+  @@index([kdWallet])
 
   @@map("wallet")
 }

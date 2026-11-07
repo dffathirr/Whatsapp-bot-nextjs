@@ -143,3 +143,75 @@ export const COMMON_CURRENCIES = new Set([
   "NZD",
   "HKD",
 ]);
+
+export function formatRupiah(amount: number): string {
+  return new Intl.NumberFormat("id-ID", {
+    style: "currency",
+    currency: "IDR",
+    minimumFractionDigits: 0,
+    maximumFractionDigits: 0,
+  }).format(amount);
+}
+
+export function formatDate(
+  dateSrc: string | number | Date,
+  {
+    locales = "id-ID",
+    format,
+    customFormat,
+  }: {
+    locales?: string;
+    format?: "Y-M-D" | "D-Month-Year" | "D-Month" | "Y-M-D H:i:s" | "H:i:s";
+    customFormat?: Intl.DateTimeFormatOptions;
+  } = {},
+) {
+  const date = new Date(dateSrc);
+  const options: Intl.DateTimeFormatOptions = { timeZone: "Asia/Jakarta" };
+
+  const year = date.toLocaleString("en-US", { year: "numeric", ...options });
+  const month = date.toLocaleString("en-US", { month: "2-digit", ...options });
+  const day = date.toLocaleString("en-US", { day: "2-digit", ...options });
+  const hours = date
+    .toLocaleString("en-US", { hour: "2-digit", hour12: false, ...options })
+    .padStart(2, "0");
+  const minutes = date
+    .toLocaleString("en-US", { minute: "2-digit", ...options })
+    .padStart(2, "0");
+  const seconds = date
+    .toLocaleString("en-US", { second: "2-digit", ...options })
+    .padStart(2, "0");
+
+  let formatted = dateSrc;
+  const chooseFormat = customFormat || format || "D-Month-Year";
+  switch (chooseFormat) {
+    case "Y-M-D":
+      formatted = `${year}-${month}-${day}`;
+      break;
+    case "Y-M-D H:i:s":
+      formatted = `${year}-${month}-${day} ${hours}:${minutes}:${seconds}`;
+      break;
+    case "H:i:s":
+      formatted = `${hours}:${minutes}:${seconds}`;
+      break;
+    case "D-Month-Year":
+      formatted = new Intl.DateTimeFormat(locales, {
+        day: "numeric",
+        month: "long",
+        year: "numeric",
+      }).format(date);
+      break;
+    case "D-Month":
+      formatted = new Intl.DateTimeFormat(locales, {
+        day: "numeric",
+        month: "short",
+      }).format(date);
+      break;
+
+    default:
+      // return the custom format here
+      formatted = new Intl.DateTimeFormat(locales, customFormat).format(date); // Using customFormat
+      break;
+  }
+
+  return formatted;
+}

@@ -8,6 +8,7 @@ model Reference {
   walletTypes           Wallet[]
   transactionTypes      Transaction[] @relation("TransactionType")
   transactionCategories Transaction[] @relation("TransactionCategory")
+  ruleTransactionTypes  Rule[]        @relation("RuleTransactionType")
 
   @@map("reference")
 }

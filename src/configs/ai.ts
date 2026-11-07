@@ -82,5 +82,3 @@ export async function ParseAi(text: string): Promise<StandarizationOutput> {
     };
   }
 }
-
-console.log("ParseAi", await ParseAi("saya beli susu 5000"));

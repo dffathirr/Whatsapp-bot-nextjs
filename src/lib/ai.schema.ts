@@ -16,11 +16,23 @@ const TransactionSchema = z
 
     category: z.enum(TRANSACTION_CATEGORIES),
 
+    sourceWalletCode: z
+      .string()
+      .nullish()
+      .describe(
+        "Value berasal dari wallet_types.code, Isi null jika pengguna tidak menyebut dompet.",
+      ),
     sourceWallet: z
       .enum(WALLET_TYPES)
       .nullish()
       .describe("Isi null jika pengguna tidak menyebut dompet."),
 
+    destinationWalletCode: z
+      .string()
+      .nullish()
+      .describe(
+        "Value berasal dari wallet_types.code, dan Hanya untuk TRANSFER (dompet tujuan), selain itu null",
+      ),
     destinationWallet: z
       .enum(WALLET_TYPES)
       .nullish()
