@@ -153,6 +153,44 @@ export function formatRupiah(amount: number): string {
   }).format(amount);
 }
 
+// parse string nominal ("500k", "1jt", "500.000", etc) to number
+export function parseNominalInput(input?: string | null): number | null {
+  if (!input) return null;
+  const s = input
+    .trim()
+    .toLowerCase()
+    .replace(/^rp\.?\s*/, "")
+    .replace(/\s+/g, "");
+
+  const match = s.match(/^(\d+(?:[.,]\d+)?)(rb|ribu|k|jt|juta)?$/);
+  if (!match) {
+    const cleanDots = s.replace(/\./g, "");
+    if (/^\d+$/.test(cleanDots)) {
+      return Number(cleanDots);
+    }
+    return null;
+  }
+
+  const suffix = match[2];
+  // Tanpa akhiran (rb/k/jt), titik ribuan seperti "150.000" harus dibersihkan agar tidak dibaca 150
+  if (!suffix && /^\d{1,3}(?:\.\d{3})+$/.test(match[1])) {
+    return Number(match[1].replace(/\./g, ""));
+  }
+
+  const numStr = match[1].replace(",", ".");
+  const base = parseFloat(numStr);
+  if (isNaN(base) || base < 0) return null;
+
+  if (suffix === "rb" || suffix === "ribu" || suffix === "k") {
+    return Math.round(base * 1_000);
+  }
+  if (suffix === "jt" || suffix === "juta") {
+    return Math.round(base * 1_000_000);
+  }
+
+  return Math.round(base);
+}
+
 export function formatDate(
   dateSrc: string | number | Date,
   {

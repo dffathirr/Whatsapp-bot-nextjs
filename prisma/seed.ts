@@ -34,7 +34,11 @@ async function main() {
   for (const ref of references) {
     const result = await prisma.reference.upsert({
       where: { code: ref.code },
-      update: {},
+      update: {
+        name: ref.name,
+        group: ref.group,
+        description: ref.description,
+      },
       create: ref,
     })
     console.log(`Upserted reference: ${result.code}`)

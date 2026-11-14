@@ -1,7 +1,10 @@
 import { IncomingMessage, ParsedCommand } from "@/types/baileys";
 import { WASocket } from "@whiskeysockets/baileys";
 import { addUser, getUser } from "@/controllers/auth.controller";
-import { COMMON_CURRENCIES, generateToken, getErrorMessage } from "@/helpers/site";
+import {
+  COMMON_CURRENCIES,
+  getErrorMessage,
+} from "@/helpers/site";
 import { prisma } from "@/lib/prisma";
 import { ResponseMessage } from "../response";
 
@@ -25,8 +28,8 @@ export default async function LoginCommand(
       "",
       "*Contoh Penggunaan:*",
       "• `/login`",
-      "• `/login Budi Santoso`",
-      "• `/login --add Budi Santoso 3201010101010001 IDR`",
+      "• `/login bot BROBOT`",
+      "• `/login --add 'bot BROBOT' 3201010101010001 IDR`",
       "• `/login --info`",
     ]);
     return;
@@ -45,7 +48,8 @@ export default async function LoginCommand(
 
   try {
     const existingUser = await getUser(phone);
-    const isInfoFlag = parsed.args.includes("--info") || parsed.args.includes("--this");
+    const isInfoFlag =
+      parsed.args.includes("--info") || parsed.args.includes("--this");
     const isAddFlag = parsed.args.includes("--add");
 
     // 2. Jika menggunakan flag --info / --this, atau user sudah terdaftar
@@ -62,30 +66,16 @@ export default async function LoginCommand(
         return;
       }
 
-      const { expired_date } = generateToken({
-        userId: existingUser.id,
-        nama: existingUser.name,
-        phone: existingUser.phone ?? phone,
-        nik: existingUser.nik || undefined,
-      });
-
-      const expiredFormatted = expired_date
-        ? new Date(expired_date).toLocaleString("id-ID", {
-            timeZone: "Asia/Jakarta",
-          })
-        : "-";
-
       await ResponseMessage(sock, msg.jid!, [
-        "✅ *Informasi Akun BROBOT*",
+        "✅ *Informasi Akun .bot BROBOT*",
         "────────────────────",
         `• Nama       : *${existingUser.name}*`,
         `• No. HP     : ${existingUser.phone}`,
         `• NIK        : ${existingUser.nik || "-"}`,
         `• Mata Uang  : ${existingUser.currency}`,
-        `• Status     : Aktif & Terverifikasi`,
-        `• Sesi Aktif : s/d ${expiredFormatted}`,
+        `• Status     : Aktif`,
         "────────────────────",
-        "Ketik transaksi Anda secara langsung (contoh: _\"beli kopi 25rb\"_) atau ketik */help* untuk panduan.",
+        '> 💡*Tips:* Ketik transaksi Anda secara langsung (contoh: _"beli kopi 25rb"_) atau ketik */help* untuk panduan.',
       ]);
       return;
     }
@@ -156,7 +146,7 @@ export default async function LoginCommand(
     await ResponseMessage(sock, msg.jid!, [
       "✅ *Akun Berhasil Didaftarkan!*",
       "────────────────────",
-      `Selamat datang di BROBOT, *${newUser.name}*!`,
+      `Selamat datang di .bot BROBOT, *${newUser.name}*!`,
       "",
       "👤 *Profil Akun:*",
       `• Nama           : ${newUser.name}`,
@@ -164,8 +154,8 @@ export default async function LoginCommand(
       `• NIK            : ${newUser.nik || "-"}`,
       `• Mata Uang      : ${newUser.currency}`,
       `• Dompet Default : Tunai (Rp 0)`,
-      "────────────────────",
-      "Sekarang Anda bisa langsung mencatat keuangan lewat chat biasa (contoh: _\"gajian 5jt\"_ atau _\"beli makan 25rb\"_).",
+      // "────────────────────",
+      '> 💡 *Tips:* Sekarang Anda bisa langsung mencatat keuangan lewat chat biasa (contoh: _"gajian 5jt"_ atau _"beli makan 25rb"_).',
     ]);
   } catch (error: unknown) {
     console.error("Error pada LoginCommand:", error);

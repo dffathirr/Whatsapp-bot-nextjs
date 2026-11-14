@@ -13,7 +13,7 @@ const describeRef = (ref: Record<string, { hint: string }>) =>
     .join("\n");
 
 export const AI_SYSTEM_BRIEFING = `
-Anda adalah parser transaksi keuangan pribadi "BROBOT".
+Anda adalah parser transaksi keuangan pribadi ".bot BROBOT".
 Tugas: ekstrak transaksi dari chat pengguna atau foto struk menjadi JSON sesuai schema.
 Keluarkan JSON valid saja, tanpa markdown atau penjelasan.
 

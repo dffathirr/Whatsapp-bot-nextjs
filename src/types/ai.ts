@@ -64,3 +64,64 @@ export function getRefCode(ref: RefMap, name?: string | null): string | null {
   }
   return null;
 }
+
+export function getRefNameByCode(ref: RefMap, code?: string | null): string | null {
+  if (!code) return null;
+  const upperCode = code.trim().toUpperCase();
+  for (const [refName, entry] of Object.entries(ref)) {
+    if (entry.code.toUpperCase() === upperCode) return refName;
+  }
+  return null;
+}
+
+const WALLET_ALIASES: Record<string, keyof typeof WALLET_REF> = {
+  tunai: "Tunai",
+  cash: "Tunai",
+  bca: "Bank BCA",
+  "bank bca": "Bank BCA",
+  mbca: "Bank BCA",
+  bsi: "Bank BSI",
+  "bank bsi": "Bank BSI",
+  mandiri: "Bank Mandiri",
+  "bank mandiri": "Bank Mandiri",
+  livin: "Bank Mandiri",
+  dana: "Dana",
+  gopay: "Gopay",
+  gojek: "Gopay",
+  shopeepay: "ShopeePay",
+  spay: "ShopeePay",
+  shopee: "ShopeePay",
+  ovo: "OVO",
+  seabank: "SeaBank",
+  "sea bank": "SeaBank",
+  jago: "Bank Jago",
+  "bank jago": "Bank Jago",
+  jenius: "Bank Jenius",
+  "bank jenius": "Bank Jenius",
+};
+
+export function resolveWalletByInput(
+  input?: string | null,
+): { name: keyof typeof WALLET_REF; code: string } | null {
+  if (!input) return null;
+  const clean = input.trim().toLowerCase();
+
+  for (const [name, entry] of Object.entries(WALLET_REF)) {
+    if (entry.code.toLowerCase() === clean || name.toLowerCase() === clean) {
+      return { name: name as keyof typeof WALLET_REF, code: entry.code };
+    }
+  }
+
+  const aliasMatch = WALLET_ALIASES[clean];
+  if (aliasMatch) {
+    return { name: aliasMatch, code: WALLET_REF[aliasMatch].code };
+  }
+
+  for (const [alias, walletKey] of Object.entries(WALLET_ALIASES)) {
+    if (clean.includes(alias)) {
+      return { name: walletKey, code: WALLET_REF[walletKey].code };
+    }
+  }
+
+  return null;
+}

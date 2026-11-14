@@ -17,6 +17,15 @@ export async function checkWallet(id: number, kd_wallet: string) {
   });
 }
 
+export async function checkWalletByName(id: number, name: string) {
+  return await prisma.wallet.findFirst({
+    where: {
+      userId: id,
+      name,
+    },
+  });
+}
+
 export async function addWallet(
   user_id: number,
   kd_wallet: string,
